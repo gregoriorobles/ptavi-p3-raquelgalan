@@ -6,7 +6,7 @@ from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 import smallsmilhandler
 import sys
-
+import os
 
 if __name__ == "__main__":
 
@@ -30,5 +30,11 @@ if __name__ == "__main__":
         for etiq in elemento:
             if etiq != "name":
                 if elemento[etiq]:
-                    print "\t", etiq, "=", '"', elemento[etiq], '"'
+                    if etiq == "src":
+                        if elemento[etiq].find("http://") == 0:
+                            recurso = elemento[etiq]
+                            os.system("wget -q " + recurso)
+                            descargado = elemento[etiq].split("/")[-1]
+                            elemento[etiq] = descargado
+                    print  "\t", etiq, "=", '"', elemento[etiq], '"'
         print "\n"
