@@ -20,18 +20,14 @@ class KaraokeLocal():
         self.lista = cHandler.get_tags()
 
     def __str__(self):
-        diccionario = ""
-        formato = ""
-        formato2 = ""
         salida = ""
         for elemento in self.lista:
-            diccionario = elemento["name"]
+            salida += elemento["name"]
             for etiq in elemento:
                 if etiq != "name":
                     if elemento[etiq]:
-                        formato = "\t" + etiq + '="' + elemento[etiq] + '"'
-            formato2 = "\n"
-        salida += diccionario + formato + formato2
+                        salida += "\t" + etiq + '="' + elemento[etiq] + '"'
+            salida += "\n"
         return salida
 
     def do_local(self):
