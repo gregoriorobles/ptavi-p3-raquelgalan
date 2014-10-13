@@ -8,6 +8,43 @@ import smallsmilhandler
 import sys
 import os
 
+
+class KaraokeLocal():
+
+    def __init__(self):
+        self.formato = ""
+        parser = make_parser()
+        cHandler = smallsmilhandler.SmallSMILHandler()
+        parser.setContentHandler(cHandler)
+        parser.parse(open('karaoke.smil'))
+        self.lista = cHandler.get_tags()
+
+    def __str__(self):
+        diccionario = ""
+        formato = ""
+        formato2 = ""
+        salida = ""
+        for elemento in self.lista:
+            diccionario = elemento["name"]
+            for etiq in elemento:
+                if etiq != "name":
+                    if elemento[etiq]:
+                        formato = "\t" + etiq + '="' + elemento[etiq] + '"'
+            formato2 = "\n"
+        salida += diccionario + formato + formato2
+        return salida
+
+    def do_local(self):
+        for elemento in self.lista:
+            for etiq in elemento:
+                if etiq != "name":
+                    if elemento[etiq]:
+                        if etiq == "src":
+                            if elemento[etiq].find("http://") == 0:
+                                recurso = elemento[etiq]
+                                os.system("wget -q " + recurso)
+                                descargado = elemento[etiq].split("/")[-1]
+                                elemento[etiq] = descargado
 if __name__ == "__main__":
 
     try:
@@ -19,22 +56,7 @@ if __name__ == "__main__":
         print ("Usage: python karaoke.py file.smil")
         raise SystemExit
 
-    parser = make_parser()
-    cHandler = smallsmilhandler.SmallSMILHandler()
-    parser.setContentHandler(cHandler)
-    parser.parse(open('karaoke.smil'))
-    lista = cHandler.get_tags()
-
-    for elemento in lista:
-        print elemento["name"]
-        for etiq in elemento:
-            if etiq != "name":
-                if elemento[etiq]:
-                    if etiq == "src":
-                        if elemento[etiq].find("http://") == 0:
-                            recurso = elemento[etiq]
-                            os.system("wget -q " + recurso)
-                            descargado = elemento[etiq].split("/")[-1]
-                            elemento[etiq] = descargado
-                    print  "\t", etiq, "=", '"', elemento[etiq], '"'
-        print "\n"
+    Karaoke = KaraokeLocal()
+    print Karaoke
+    Karaoke.do_local()
+    print Karaoke
