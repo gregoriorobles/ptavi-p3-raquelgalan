@@ -11,12 +11,12 @@ import os
 
 class KaraokeLocal():
 
-    def __init__(self):
+    def __init__(self, fichero):
         self.formato = ""
         parser = make_parser()
         cHandler = smallsmilhandler.SmallSMILHandler()
         parser.setContentHandler(cHandler)
-        parser.parse(open('karaoke.smil'))
+        parser.parse(open(fichero))
         self.lista = cHandler.get_tags()
 
     def __str__(self):
@@ -44,15 +44,11 @@ class KaraokeLocal():
 if __name__ == "__main__":
 
     try:
-        fich = open(sys.argv[1], "r")
-    except IOError:
-        print ("no encuentra el file.smil")
-        raise SystemExit
+        fich = sys.argv[1]
     except IndexError:
-        print ("Usage: python karaoke.py file.smil")
-        raise SystemExit
+        sys.exit("Usage: python karaoke.py file.smil")
 
-    Karaoke = KaraokeLocal()
+    Karaoke = KaraokeLocal(fich)
     print Karaoke
     Karaoke.do_local()
     print Karaoke
